@@ -11,8 +11,9 @@ object Main {
   def main(args: Array[String]): Unit = {
     val languages = Enumerator("scala", "java", "haskel", "clojure")
     val iteratee = Iteratee.fold[String, String]("")((r, c) => s"$r => $c ")
-    val result = languages.run(iteratee)
-    result.onComplete {
+    val result = languages |>> iteratee
+    val res1 = Iteratee.flatten(result).run
+    res1.onComplete {
       case Success(value) => println(value)
       case Failure(th) => println(th.getMessage)
     }
