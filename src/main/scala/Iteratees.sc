@@ -18,5 +18,5 @@ object Test {
     case Success(value) => println(s"value $value")
     case Failure(th) => println(s"throwable ${th.getMessage}")
   }
-  Await.ready(future, 10 minutes)
+  Await.ready(future, 100 minutes)
 }
