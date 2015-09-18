@@ -1,4 +1,4 @@
-import play.api.libs.iteratee.{Iteratee, Enumerator}
+import play.api.libs.iteratee.{Enumeratee, Iteratee, Enumerator}
 import scala.concurrent.Await
 import scala.concurrent.duration._
 import scala.util.{Failure, Success}
@@ -10,7 +10,7 @@ object Test {
     "black berry", "grapes")
   val moreFruits = Enumerator("custurd apple", "orange", "kiwi",
     "water melon")
-  val result = fruits >>> moreFruits |>>
+  val result = fruits >>> moreFruits &> Enumeratee.take(1) |>>
     Iteratee.fold[String, String]("")((r, c) => r + " -> " + c)
   val iteratee = Iteratee.flatten(result)
   val future = iteratee.run
@@ -18,5 +18,6 @@ object Test {
     case Success(value) => println(s"value $value")
     case Failure(th) => println(s"throwable ${th.getMessage}")
   }
+
   Await.ready(future, 100 minutes)
 }
