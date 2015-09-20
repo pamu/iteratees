@@ -25,4 +25,21 @@ object Main {
   }
 
 
+  sealed trait Step[+B]
+
+  case class Done[+B](result: B) extends Step[B]
+
+  case class Cont[+A](value: A) extends Step[A]
+
+  def foldLeftX[B, A](iStream: List[A])(acc: B)(f: (B, A) => Step[B]): B = {
+    def loop(list: List[A])(acc: B): B = list match {
+      case Nil => acc
+      case x :: Nil => f(acc, x) match {
+        case Done(result) => result
+        case Cont(value) => loop(Nil)(value)
+      }
+    }
+    loop(iStream)(acc)
+  }
+
 }
