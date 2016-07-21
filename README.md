@@ -1,2 +1,1 @@
-# play-iteratees
-play iteratees and enumeratees
+# Enumeration based IO
